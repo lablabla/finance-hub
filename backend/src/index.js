@@ -2,6 +2,9 @@ import 'dotenv/config';
 import express from 'express';
 import getDb from './db/db.js';
 import sourcesRouter from './routes/sources.js';
+import accountsRouter from './routes/accounts.js';
+import transactionsRouter from './routes/transactions.js';
+import snapshotsRouter from './routes/snapshots.js';
 import checklistRouter from './routes/checklist.js';
 import uploadRouter from './routes/upload.js';
 import validateRouter from './routes/validate.js';
@@ -21,6 +24,9 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/sources', sourcesRouter);
+app.use('/api/accounts', accountsRouter);
+app.use('/api/transactions', transactionsRouter);
+app.use('/api/snapshots', snapshotsRouter);
 app.use('/api/checklist', checklistRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/validate', validateRouter);

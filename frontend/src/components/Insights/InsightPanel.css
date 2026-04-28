@@ -1,0 +1,13 @@
+.insight-panel { max-width: 720px; }
+.insight-header { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; }
+.insight-header select { border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem 0.6rem; font-size: 0.9rem; }
+.generate-btn { background: #7c9ef8; color: #fff; border: none; padding: 0.45rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+.generate-btn:hover:not(:disabled) { background: #4a7cf0; }
+.generate-btn:disabled { opacity: 0.6; cursor: default; }
+.insight-body { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+.insight-content { line-height: 1.7; font-size: 0.95rem; color: #333; }
+.insight-content h2, .insight-content h3, .insight-content h4 { margin: 1rem 0 0.4rem; color: #1a1a2e; }
+.insight-content li { margin-left: 1.25rem; margin-bottom: 0.3rem; }
+.insight-meta { margin-top: 1rem; font-size: 0.78rem; color: #aaa; }
+.insight-empty { color: #888; font-size: 0.9rem; line-height: 1.6; }
+.loading { color: #aaa; font-size: 0.9rem; }

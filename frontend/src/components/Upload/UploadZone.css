@@ -1,0 +1,9 @@
+.upload-zone {
+  border: 2px dashed #ccc; border-radius: 12px;
+  padding: 3rem 2rem; text-align: center; cursor: pointer;
+  color: #888; font-size: 0.95rem; transition: border-color 0.2s, background 0.2s;
+  background: #fafafa;
+}
+.upload-zone:hover, .upload-zone.dragging { border-color: #7c9ef8; background: #f0f4ff; }
+.upload-zone.uploading { cursor: default; opacity: 0.7; }
+.drop-icon { font-size: 2rem; margin-bottom: 0.5rem; }

@@ -1,0 +1,3 @@
+.parse-result { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem; }
+.parse-result.success { background: #d8f3dc; color: #2d6a4f; }
+.parse-result.error   { background: #fee2e2; color: #991b1b; }

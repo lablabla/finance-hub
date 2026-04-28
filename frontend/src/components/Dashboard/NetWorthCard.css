@@ -1,0 +1,27 @@
+.net-worth-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  margin-bottom: 1.5rem;
+}
+.net-worth-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+.net-worth-header h2 { font-size: 1rem; color: #666; font-weight: 500; }
+.refresh-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #7c9ef8;
+  padding: 0.2rem 0.4rem;
+}
+.refresh-btn:hover { color: #4a7cf0; }
+.net-worth-total { font-size: 2.2rem; font-weight: 700; color: #1a1a2e; margin-bottom: 1rem; }
+.category-breakdown { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+.category-row { display: flex; gap: 0.5rem; font-size: 0.9rem; color: #444; }
+.category-row span:last-child { font-weight: 600; }
+.loading, .empty { color: #888; font-size: 0.95rem; padding: 0.5rem 0; }

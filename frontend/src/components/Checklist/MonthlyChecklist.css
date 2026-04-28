@@ -1,0 +1,28 @@
+.checklist-page { display: flex; gap: 2rem; max-width: 1100px; }
+
+.checklist-sidebar { width: 180px; flex-shrink: 0; }
+.month-list { display: flex; flex-direction: column; gap: 0.25rem; }
+.month-btn {
+  background: none; border: none; text-align: left;
+  padding: 0.45rem 0.75rem; border-radius: 6px;
+  font-size: 0.88rem; color: #555; cursor: pointer;
+}
+.month-btn:hover { background: #eee; }
+.month-btn.active { background: #7c9ef8; color: #fff; font-weight: 600; }
+
+.checklist-main { flex: 1; }
+.checklist-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.page-title { font-size: 1.5rem; font-weight: 700; color: #1a1a2e; }
+.checklist-subtitle { color: #888; font-size: 0.9rem; margin-top: 0.2rem; }
+.progress-ring { flex-shrink: 0; }
+
+.checklist-section { margin-bottom: 1.5rem; }
+.section-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: #888; font-weight: 600; margin-bottom: 0.5rem; }
+
+.add-source-area { margin-top: 1rem; }
+.add-source-btn {
+  background: none; border: 1px dashed #bbb; color: #777;
+  padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.9rem;
+}
+.add-source-btn:hover { border-color: #7c9ef8; color: #7c9ef8; }
+.loading { color: #aaa; }

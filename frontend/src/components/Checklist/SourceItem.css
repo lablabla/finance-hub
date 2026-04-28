@@ -1,0 +1,21 @@
+.source-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: #fff; border-radius: 8px; padding: 0.65rem 1rem;
+  margin-bottom: 0.4rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: opacity 0.2s;
+}
+.source-item.checked { opacity: 0.65; }
+.source-check { display: flex; align-items: center; gap: 0.5rem; flex: 1; cursor: pointer; }
+.source-check input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; accent-color: #7c9ef8; }
+.source-name { font-size: 0.92rem; }
+.badge {
+  font-size: 0.7rem; padding: 0.1rem 0.4rem; border-radius: 4px;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.badge.annual { background: #fde8df; color: #b5451b; }
+.badge.api    { background: #dbeafe; color: #1a3a5c; }
+.checked-at { font-size: 0.78rem; color: #aaa; margin-left: auto; }
+.delete-btn {
+  background: none; border: none; color: #ccc; font-size: 1.1rem; padding: 0 0.25rem; line-height: 1;
+}
+.delete-btn:hover { color: #e05555; }

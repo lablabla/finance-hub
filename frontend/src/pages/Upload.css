@@ -1,0 +1,4 @@
+.upload-page { max-width: 640px; }
+.upload-card { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-top: 1rem; }
+.source-select-label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
+.source-select-label select { border: 1px solid #ddd; border-radius: 6px; padding: 0.45rem 0.6rem; font-size: 0.92rem; }
