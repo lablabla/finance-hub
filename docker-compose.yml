@@ -16,7 +16,7 @@ services:
     ports:
       - "3002:80"          # NPM proxies to this; not exposed to the internet
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - backend
     networks:
