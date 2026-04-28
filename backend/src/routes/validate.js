@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
+import path from 'path';
 import fs from 'fs';
 import { run, query, get } from '../db/db.js';
 import { extractText } from '../parsers/pdf.js';
@@ -7,10 +8,13 @@ import { extractInstitutions, compareWithSources } from '../parsers/validation.j
 
 const router = Router();
 
+const DATA_PATH = process.env.DATA_PATH || './data';
+
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    fs.mkdirSync('/data/uploads/validation', { recursive: true });
-    cb(null, '/data/uploads/validation');
+    const dir = path.join(DATA_PATH, 'uploads', 'validation');
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
   },
   filename(req, file, cb) {
     cb(null, `${Date.now()}-${file.originalname}`);

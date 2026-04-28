@@ -10,9 +10,11 @@ import { normalizeAndSave } from '../normalizer.js';
 
 const router = Router();
 
+const DATA_PATH = process.env.DATA_PATH || './data';
+
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    const dir = `/data/uploads/${req.body.source_id || 'unknown'}`;
+    const dir = path.join(DATA_PATH, 'uploads', req.body.source_id || 'unknown');
     fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
