@@ -33,6 +33,10 @@ app.use('/api/validate', validateRouter);
 app.use('/api/insights', insightsRouter);
 app.use('/api/etrade', etradeAuthRouter);
 
+if (!process.env.ANTHROPIC_API_KEY) {
+  console.warn(`[${new Date().toISOString()}] WARNING: ANTHROPIC_API_KEY is not set — PDF extraction and insights will fail`);
+}
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`[${new Date().toISOString()}] Finance Hub backend running on :${PORT}`);
