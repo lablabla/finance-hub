@@ -39,13 +39,13 @@ export default function UploadZone({ sourceId, onResult, onError }) {
       onDrop={onDrop}
       onClick={() => !uploading && inputRef.current.click()}
     >
-      <input ref={inputRef} type="file" accept=".csv,.pdf" style={{ display: 'none' }} onChange={(e) => e.target.files[0] && upload(e.target.files[0])} />
+      <input ref={inputRef} type="file" accept=".csv,.xlsx,.pdf" style={{ display: 'none' }} onChange={(e) => e.target.files[0] && upload(e.target.files[0])} />
       {uploading ? (
         <p>Uploading…</p>
       ) : (
         <>
           <p className="drop-icon">📂</p>
-          <p>Drag a CSV or PDF here, or click to browse</p>
+          <p>Drag a CSV, XLSX, or PDF here, or click to browse</p>
         </>
       )}
     </div>

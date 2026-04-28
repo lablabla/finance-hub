@@ -102,6 +102,13 @@ const MAPPERS = {
   'visa-cal': mapVisaCal,
 };
 
+// Apply a source mapper to pre-parsed rows (used by both CSV and XLSX paths)
+export function applyMapper(rows, sourceId) {
+  const mapper = MAPPERS[sourceId];
+  if (!mapper) throw new Error(`No CSV mapper for source: ${sourceId}`);
+  return mapper(rows);
+}
+
 export function parseCSV(filePath, sourceId) {
   return new Promise((resolve, reject) => {
     const rows = [];
@@ -110,10 +117,8 @@ export function parseCSV(filePath, sourceId) {
       .on('data', (row) => rows.push(row))
       .on('error', reject)
       .on('end', () => {
-        const mapper = MAPPERS[sourceId];
-        if (!mapper) return reject(new Error(`No CSV mapper for source: ${sourceId}`));
         try {
-          resolve(mapper(rows));
+          resolve(applyMapper(rows, sourceId));
         } catch (e) {
           reject(e);
         }

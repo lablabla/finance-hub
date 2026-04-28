@@ -17,6 +17,7 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.13",
     "oauth-1.0a": "^2.2.6",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "xlsx": "^0.18.5"
   }
 }

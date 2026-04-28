@@ -3,7 +3,8 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { run } from '../db/db.js';
-import { parseCSV } from '../parsers/csv.js';
+import { parseCSV, applyMapper } from '../parsers/csv.js';
+import { parseXLSXRows, xlsxToCSVText } from '../parsers/xlsx.js';
 import { extractText } from '../parsers/pdf.js';
 import { extractFromPDF } from '../parsers/ai-extractor.js';
 import { normalizeAndSave } from '../normalizer.js';
@@ -33,14 +34,18 @@ router.post('/', upload.single('file'), async (req, res) => {
   const ext = path.extname(req.file.originalname).toLowerCase();
   let result;
   try {
-    if (ext === '.csv') {
+    if (ext === '.csv' || ext === '.xlsx') {
       // Try per-source mapper first; fall back to AI extraction if no mapper exists
       try {
-        const parsed = await parseCSV(req.file.path, source_id);
+        const parsed = ext === '.xlsx'
+          ? applyMapper(parseXLSXRows(req.file.path), source_id)
+          : await parseCSV(req.file.path, source_id);
         result = await normalizeAndSave(parsed, source_id);
       } catch (mapperErr) {
         if (mapperErr.message.startsWith('No CSV mapper')) {
-          const text = fs.readFileSync(req.file.path, 'utf8');
+          const text = ext === '.xlsx'
+            ? xlsxToCSVText(req.file.path)
+            : fs.readFileSync(req.file.path, 'utf8');
           const parsed = await extractFromPDF({ text, source_id });
           result = await normalizeAndSave(parsed, source_id);
         } else {
@@ -57,7 +62,7 @@ router.post('/', upload.single('file'), async (req, res) => {
       const parsed = await extractFromPDF({ text, source_id });
       result = await normalizeAndSave(parsed, source_id);
     } else {
-      return res.status(400).json({ error: 'Unsupported file type. Use CSV or PDF.' });
+      return res.status(400).json({ error: 'Unsupported file type. Use CSV, XLSX, or PDF.' });
     }
 
     run(

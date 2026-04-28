@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { run, query, get } from '../db/db.js';
 import { extractText } from '../parsers/pdf.js';
+import { xlsxToCSVText } from '../parsers/xlsx.js';
 import { extractInstitutions, compareWithSources } from '../parsers/validation.js';
 
 const router = Router();
@@ -29,7 +30,10 @@ async function fileToText(filePath) {
     const { text } = await extractText(fs.readFileSync(filePath));
     return text;
   }
-  // CSV / any text format — read as-is; Claude handles tabular text fine
+  if (ext === '.xlsx') {
+    return xlsxToCSVText(filePath);
+  }
+  // CSV / plain text — read as-is
   return fs.readFileSync(filePath, 'utf8');
 }
 
@@ -40,8 +44,8 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     return res.status(400).json({ error: 'report_type and file are required' });
   }
   const ext = path.extname(req.file.originalname).toLowerCase();
-  if (!['.pdf', '.csv'].includes(ext)) {
-    return res.status(400).json({ error: 'Only PDF and CSV files are supported' });
+  if (!['.pdf', '.csv', '.xlsx'].includes(ext)) {
+    return res.status(400).json({ error: 'Only PDF, CSV, and XLSX files are supported' });
   }
   try {
     const text = await fileToText(req.file.path);

@@ -47,8 +47,8 @@ export default function ValidationUpload({ onDone }) {
         onDrop={e => { e.preventDefault(); setDragging(false); const f = e.dataTransfer.files[0]; if (f) upload(f); }}
         onClick={() => !uploading && inputRef.current.click()}
       >
-        <input ref={inputRef} type="file" accept=".pdf,.csv" style={{ display: 'none' }} onChange={e => e.target.files[0] && upload(e.target.files[0])} />
-        {uploading ? <p>Processing with AI…</p> : <><p className="drop-icon">🏛️</p><p>Drop PDF or CSV here or click to browse</p></>}
+        <input ref={inputRef} type="file" accept=".pdf,.csv,.xlsx" style={{ display: 'none' }} onChange={e => e.target.files[0] && upload(e.target.files[0])} />
+        {uploading ? <p>Processing with AI…</p> : <><p className="drop-icon">🏛️</p><p>Drop PDF, CSV, or XLSX here or click to browse</p></>}
       </div>
       {error && <p className="val-error">{error}</p>}
     </div>
