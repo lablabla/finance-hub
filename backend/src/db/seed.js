@@ -13,6 +13,16 @@ const sources = [
     frequency: 'monthly',
   },
   {
+    id: 'otzar-hahayal-securities',
+    name: 'Otzar HaHayal – Securities',
+    category: 'invest',
+    type: 'manual',
+    format: 'XLSX',
+    url: 'https://www.otsarhahayal.co.il',
+    notes: 'Securities portfolio (תיק ני"ע). Export via the portfolio page.',
+    frequency: 'monthly',
+  },
+  {
     id: 'otzar-hahayal',
     name: 'Otzar HaHayal',
     category: 'bank',

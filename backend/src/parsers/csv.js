@@ -97,8 +97,78 @@ function parseIsraeliDate(str) {
   return str;
 }
 
+// Otzar HaHayal securities portfolio XLSX
+// Columns: _1=נייר, _2=מספר נייר, _5=כמות, _6=שער אחרון, _7=מטבע, _16=שווי אחזקה בשח
+function mapOtzarHahayalSecurities(rows) {
+  // Find meta row: contains "סניף:"
+  const metaRow = rows.find(r => String(r[' _1'] || '').includes('סניף:')) || {};
+  const branchStr  = String(metaRow[' _1'] || '');
+  const accountStr = String(metaRow[' _2'] || '');
+  const dateStr    = String(metaRow[' _3'] || '');
+
+  const branch  = branchStr.replace('סניף:', '').trim();
+  const account = accountStr.replace('חשבון:', '').trim();
+  const asOf    = parseIsraeliDate(dateStr.replace('תאריך ייצוא:', '').trim());
+  const accountId = `otzar-hahayal-securities-${account || 'main'}`;
+
+  // Portfolio total: row containing שווי תיק
+  const totalRow = rows.find(r => String(r[' _1'] || '').includes('שווי תיק'));
+  const balance  = parseFloat(String(totalRow?.[' _2'] || '0').replace(/,/g, '')) || 0;
+
+  // Find header row index (where _1 === "נייר")
+  const headerIdx = rows.findIndex(r => String(r[' _1'] || '').trim() === 'נייר');
+
+  // Section headers to skip (not actual holdings)
+  const SKIP = ['ניע ישראלים', 'ניע זרים', 'קרנות נאמנות', 'אגרות חוב', 'מניות', 'תעודות סל'];
+
+  const holdings = headerIdx >= 0
+    ? rows.slice(headerIdx + 1).filter(r => {
+        const name = String(r[' _1'] || '').trim();
+        return name && !SKIP.some(s => name.includes(s)) && !name.includes('סה"כ') && !name.includes('סהכ');
+      })
+    : [];
+
+  const transactions = holdings.map(r => {
+    const name     = String(r[' _1'] || '').trim();
+    const secNum   = String(r[' _2'] || '').trim();
+    const qty      = parseFloat(String(r[' _5'] || '0').replace(/,/g, '')) || 0;
+    const price    = parseFloat(String(r[' _6'] || '0').replace(/,/g, '')) || 0;
+    const currency = String(r[' _7'] || '₪').trim() === '₪' ? 'ILS' : (r[' _7'] || 'ILS');
+    const valueIls = parseFloat(String(r[' _16'] || '0').replace(/,/g, '')) || 0;
+    const desc     = secNum ? `${name} (${secNum}) × ${qty}` : `${name} × ${qty}`;
+    return {
+      id: txId(accountId, asOf, desc, valueIls),
+      account_id: accountId,
+      date: asOf,
+      processed_date: null,
+      description: desc,
+      category: 'holding',
+      amount: valueIls,
+      currency: 'ILS',
+      amount_ils: valueIls,
+      status: 'completed',
+    };
+  });
+
+  return {
+    account: {
+      id: accountId,
+      source_id: 'otzar-hahayal-securities',
+      name: `Otzar HaHayal Securities (${account})`,
+      type: 'investment',
+      currency: 'ILS',
+      balance,
+      balance_usd: null,
+      fx_rate: null,
+      as_of: asOf,
+    },
+    transactions,
+  };
+}
+
 const MAPPERS = {
   'otzar-hahayal': mapOtzarHahayal,
+  'otzar-hahayal-securities': mapOtzarHahayalSecurities,
   'visa-cal': mapVisaCal,
 };
 
