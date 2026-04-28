@@ -5,7 +5,24 @@ services:
     restart: unless-stopped
     volumes:
       - ./backend/data:/data
-    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DB_PATH=/data/finance.sqlite
+      - DATA_PATH=/data
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - ETRADE_CONSUMER_KEY=${ETRADE_CONSUMER_KEY:-}
+      - ETRADE_CONSUMER_SECRET=${ETRADE_CONSUMER_SECRET:-}
+      - ETRADE_BASE_URL=${ETRADE_BASE_URL:-https://api.etrade.com}
+      - FX_API_KEY=${FX_API_KEY:-}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
+      - REMINDER_EMAIL_FROM=${REMINDER_EMAIL_FROM:-}
+      - REMINDER_EMAIL_TO=${REMINDER_EMAIL_TO:-}
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
     networks:
       - finance
 
@@ -14,7 +31,7 @@ services:
     container_name: finance-hub-nginx
     restart: unless-stopped
     ports:
-      - "3002:80"          # NPM proxies to this; not exposed to the internet
+      - "3002:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
