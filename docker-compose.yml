@@ -1,19 +1,27 @@
 services:
   backend:
     build: ./backend
+    container_name: finance-hub-backend
     restart: unless-stopped
     volumes:
       - ./backend/data:/data
     env_file: .env
-    ports:
-      - "3001:3001"
+    networks:
+      - finance
 
   nginx:
     build: ./frontend
+    container_name: finance-hub-nginx
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "3002:80"          # NPM proxies to this; not exposed to the internet
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - backend
+    networks:
+      - finance
+
+networks:
+  finance:
+    driver: bridge
