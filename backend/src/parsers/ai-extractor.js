@@ -3,36 +3,28 @@ import crypto from 'crypto';
 
 const client = new Anthropic();
 
+const TX_LIMIT = 100;
+const TX_NOTE = `Include at most ${TX_LIMIT} transactions (most recent first). Keep description strings short — under 80 characters each.`;
+
 const SYSTEM_PROMPTS = {
   'harel-pension': `You extract structured financial data from Israeli pension fund (קרן פנסיה) PDF reports by Harel insurance.
-Extract: account holder name, account number, current balance (in ILS), as-of date, and a list of transactions if present.
+Extract: account holder name, account number, current balance (in ILS), as-of date, and a list of transactions if present. ${TX_NOTE}
 Return JSON only, no prose. Schema:
-{
-  "account": { "name": string, "id": string, "type": "pension", "currency": "ILS", "balance": number, "as_of": "YYYY-MM-DD" },
-  "transactions": [{ "date": "YYYY-MM-DD", "description": string, "amount": number, "currency": "ILS" }]
-}`,
+{"account":{"name":string,"id":string,"type":"pension","currency":"ILS","balance":number,"as_of":"YYYY-MM-DD"},"transactions":[{"date":"YYYY-MM-DD","description":string,"amount":number,"currency":"ILS"}]}`,
   'harel-keren-hishtalmut': `You extract structured financial data from Israeli study fund (קרן השתלמות) PDF reports by Harel insurance.
-Extract: account holder name, account number, current balance (in ILS), as-of date, and a list of transactions if present.
+Extract: account holder name, account number, current balance (in ILS), as-of date, and a list of transactions if present. ${TX_NOTE}
 Return JSON only, no prose. Schema:
-{
-  "account": { "name": string, "id": string, "type": "study_fund", "currency": "ILS", "balance": number, "as_of": "YYYY-MM-DD" },
-  "transactions": [{ "date": "YYYY-MM-DD", "description": string, "amount": number, "currency": "ILS" }]
-}`,
+{"account":{"name":string,"id":string,"type":"study_fund","currency":"ILS","balance":number,"as_of":"YYYY-MM-DD"},"transactions":[{"date":"YYYY-MM-DD","description":string,"amount":number,"currency":"ILS"}]}`,
   'excellence-investments': `You extract structured financial data from Israeli investment portfolio PDF reports by Excellence (אקסלנס) / Phoenix Holdings.
-Extract: account holder name, account number, total portfolio value (in ILS or USD), as-of date, and holdings/transactions if present.
+Extract: account holder name, account number, total portfolio value (in ILS or USD), as-of date, and holdings/transactions if present. ${TX_NOTE}
 Return JSON only, no prose. Schema:
-{
-  "account": { "name": string, "id": string, "type": "investment", "currency": string, "balance": number, "as_of": "YYYY-MM-DD" },
-  "transactions": [{ "date": "YYYY-MM-DD", "description": string, "amount": number, "currency": string }]
-}`,
+{"account":{"name":string,"id":string,"type":"investment","currency":string,"balance":number,"as_of":"YYYY-MM-DD"},"transactions":[{"date":"YYYY-MM-DD","description":string,"amount":number,"currency":string}]}`,
 };
 
-const DEFAULT_SYSTEM = `You extract structured financial data from Israeli financial PDF reports.
+const DEFAULT_SYSTEM = `You extract structured financial data from Israeli financial PDF or CSV reports.
+Extract: account holder name, account number or identifier, current balance, as-of date, and transactions. ${TX_NOTE}
 Return JSON only, no prose. Schema:
-{
-  "account": { "name": string, "id": string, "type": string, "currency": string, "balance": number, "as_of": "YYYY-MM-DD" },
-  "transactions": [{ "date": "YYYY-MM-DD", "description": string, "amount": number, "currency": string }]
-}`;
+{"account":{"name":string,"id":string,"type":string,"currency":string,"balance":number,"as_of":"YYYY-MM-DD"},"transactions":[{"date":"YYYY-MM-DD","description":string,"amount":number,"currency":string}]}`;
 
 function txId(accountId, date, description, amount) {
   return crypto
@@ -47,7 +39,7 @@ export async function extractFromPDF({ text, source_id }) {
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 2048,
+    max_tokens: 8192,
     system: [
       {
         type: 'text',
@@ -58,15 +50,24 @@ export async function extractFromPDF({ text, source_id }) {
     messages: [
       {
         role: 'user',
-        content: `Extract financial data from this PDF text:\n\n${text}`,
+        content: `Extract financial data from this document:\n\n${text}`,
       },
     ],
   });
 
+  if (response.stop_reason === 'max_tokens') {
+    throw new Error('Claude response was truncated — the document may be too large. Try uploading a shorter date range or a CSV export instead.');
+  }
+
   const raw = response.content[0].text;
   // Strip markdown code fences if present
   const json = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
-  const parsed = JSON.parse(json);
+  let parsed;
+  try {
+    parsed = JSON.parse(json);
+  } catch (e) {
+    throw new Error(`Claude returned malformed JSON: ${e.message}. Raw response length: ${raw.length} chars.`);
+  }
 
   const accountId = `${source_id}-${parsed.account.id || 'main'}`;
   const account = {
