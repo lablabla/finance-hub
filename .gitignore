@@ -1,7 +1,9 @@
 node_modules/
 .env
 *.sqlite
-backend/data/uploads/
-backend/data/*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+backend/data/
 frontend/dist/
 .DS_Store
+PLAN.md
