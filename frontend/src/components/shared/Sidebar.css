@@ -30,22 +30,56 @@
   color: #b0b0c8;
   font-size: 0.92rem;
   transition: background 0.15s, color 0.15s;
-  border-radius: 0;
 }
 
-.sidebar-link:hover {
-  background: #2d2d44;
-  color: #fff;
+.sidebar-link:hover { background: #2d2d44; color: #fff; }
+.sidebar-link.active { background: #2d2d44; color: #7c9ef8; font-weight: 600; }
+.sidebar-icon { font-size: 1rem; width: 1.2rem; text-align: center; }
+
+/* Hamburger — hidden on desktop */
+.sidebar-hamburger {
+  display: none;
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 200;
+  background: #1a1a2e;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 0.55rem;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+.sidebar-hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
 }
 
-.sidebar-link.active {
-  background: #2d2d44;
-  color: #7c9ef8;
-  font-weight: 600;
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 99;
 }
 
-.sidebar-icon {
-  font-size: 1rem;
-  width: 1.2rem;
-  text-align: center;
+@media (max-width: 768px) {
+  .sidebar-hamburger { display: flex; }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    min-height: unset;
+  }
+  .sidebar.sidebar-open { transform: translateX(0); }
+  .sidebar-overlay { display: block; }
 }

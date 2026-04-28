@@ -1,8 +1,0 @@
-.val-upload { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 1.5rem; }
-.val-upload h3 { font-size: 1rem; margin-bottom: 1rem; }
-.report-type-label { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
-.report-type-label select { border: 1px solid #ddd; border-radius: 6px; padding: 0.45rem 0.6rem; font-size: 0.92rem; }
-.upload-zone { border: 2px dashed #ccc; border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer; color: #888; font-size: 0.92rem; background: #fafafa; transition: border-color 0.2s, background 0.2s; }
-.upload-zone:hover, .upload-zone.dragging { border-color: #7c9ef8; background: #f0f4ff; }
-.drop-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
-.val-error { margin-top: 0.75rem; color: #e05555; font-size: 0.88rem; }

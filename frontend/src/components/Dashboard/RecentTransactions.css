@@ -5,3 +5,7 @@
 .tx-table tr:last-child td { border-bottom: none; }
 .debit { color: #e05555; font-weight: 600; }
 .credit { color: #27ae60; font-weight: 600; }
+
+@media (max-width: 768px) {
+  .tx-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}

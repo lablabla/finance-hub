@@ -4,7 +4,6 @@ import Sidebar from './components/shared/Sidebar.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Checklist from './pages/Checklist.jsx';
 import Upload from './pages/Upload.jsx';
-import Validation from './pages/Validation.jsx';
 import Insights from './pages/Insights.jsx';
 import './App.css';
 
@@ -18,7 +17,6 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/checklist" element={<Checklist />} />
             <Route path="/upload" element={<Upload />} />
-            <Route path="/validate" element={<Validation />} />
             <Route path="/insights" element={<Insights />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

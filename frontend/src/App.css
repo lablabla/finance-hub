@@ -8,4 +8,12 @@
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .app-content {
+    padding: 1rem;
+    padding-top: 3.5rem; /* clear the hamburger button */
+  }
 }

@@ -7,7 +7,6 @@ import transactionsRouter from './routes/transactions.js';
 import snapshotsRouter from './routes/snapshots.js';
 import checklistRouter from './routes/checklist.js';
 import uploadRouter from './routes/upload.js';
-import validateRouter from './routes/validate.js';
 import insightsRouter from './routes/insights.js';
 import etradeAuthRouter from './routes/etrade-auth.js';
 
@@ -29,7 +28,6 @@ app.use('/api/transactions', transactionsRouter);
 app.use('/api/snapshots', snapshotsRouter);
 app.use('/api/checklist', checklistRouter);
 app.use('/api/upload', uploadRouter);
-app.use('/api/validate', validateRouter);
 app.use('/api/insights', insightsRouter);
 app.use('/api/etrade', etradeAuthRouter);
 

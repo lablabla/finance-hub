@@ -6,10 +6,10 @@ const sources = [
     id: 'etrade',
     name: 'E*TRADE',
     category: 'invest',
-    type: 'api',
-    format: 'API',
+    type: 'manual',
+    format: 'CSV',
     url: 'https://us.etrade.com',
-    notes: 'US stocks. Requires annual developer agreement renewal.',
+    notes: 'US stocks. Export portfolio CSV from the E*TRADE website.',
     frequency: 'monthly',
   },
   {
@@ -72,36 +72,6 @@ const sources = [
     notes: 'Now under Phoenix Holdings.',
     frequency: 'monthly',
   },
-  {
-    id: 'har-habituach',
-    name: 'הר הביטוח',
-    category: 'insurance',
-    type: 'manual',
-    format: 'PDF',
-    url: 'https://harb.cma.gov.il',
-    notes: 'Government validation — all active insurance policies.',
-    frequency: 'monthly',
-  },
-  {
-    id: 'pension-clearinghouse',
-    name: 'המסלקה הפנסיונית',
-    category: 'pension',
-    type: 'manual',
-    format: 'PDF',
-    url: 'https://www.swiftness.co.il',
-    notes: 'Government validation — all pension/study funds.',
-    frequency: 'monthly',
-  },
-  {
-    id: 'har-hakesef',
-    name: 'הר הכסף',
-    category: 'bank',
-    type: 'manual',
-    format: 'PDF',
-    url: 'https://harkeseff.cma.gov.il',
-    notes: 'Government validation — dormant savings accounts. Annual check.',
-    frequency: 'annual',
-  },
 ];
 
 for (const s of sources) {
@@ -111,5 +81,13 @@ for (const s of sources) {
     [s.id, s.name, s.category, s.type, s.format, s.url, s.notes, s.frequency]
   );
 }
+
+// Remove validation sources if they exist from a previous seed
+for (const id of ['har-habituach', 'pension-clearinghouse', 'har-hakesef']) {
+  run(`DELETE FROM sources WHERE id = ?`, [id]);
+}
+
+// Update etrade to manual if it was previously seeded as api
+run(`UPDATE sources SET type = 'manual', format = 'CSV' WHERE id = 'etrade' AND type = 'api'`);
 
 console.log(`[${new Date().toISOString()}] Seeded ${sources.length} sources`);

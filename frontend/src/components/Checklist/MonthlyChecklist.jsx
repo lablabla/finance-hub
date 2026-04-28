@@ -48,8 +48,7 @@ export default function MonthlyChecklist() {
   const handleAdded = () => { setShowAdd(false); load(); };
 
   const apiSources    = items.filter(i => i.type === 'api');
-  const manualSources = items.filter(i => i.type === 'manual' && i.category !== 'insurance' && !['har-habituach','pension-clearinghouse','har-hakesef'].includes(i.source_id));
-  const govSources    = items.filter(i => ['har-habituach','pension-clearinghouse','har-hakesef'].includes(i.source_id) || (i.type === 'manual' && i.category === 'insurance'));
+  const manualSources = items.filter(i => i.type === 'manual');
 
   const total   = items.length;
   const checked = items.filter(i => i.checked).length;
@@ -101,7 +100,6 @@ export default function MonthlyChecklist() {
           <>
             <Section title="⚡ API Sources (auto)" sources={apiSources} year={year} month={month} onToggle={toggle} onDelete={handleDelete} />
             <Section title="📂 Manual Sources" sources={manualSources} year={year} month={month} onToggle={toggle} onDelete={handleDelete} />
-            <Section title="🏛️ Government Validation" sources={govSources} year={year} month={month} onToggle={toggle} onDelete={handleDelete} />
           </>
         )}
 

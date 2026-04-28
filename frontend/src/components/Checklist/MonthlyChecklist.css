@@ -10,7 +10,7 @@
 .month-btn:hover { background: #eee; }
 .month-btn.active { background: #7c9ef8; color: #fff; font-weight: 600; }
 
-.checklist-main { flex: 1; }
+.checklist-main { flex: 1; min-width: 0; }
 .checklist-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
 .page-title { font-size: 1.5rem; font-weight: 700; color: #1a1a2e; }
 .checklist-subtitle { color: #888; font-size: 0.9rem; margin-top: 0.2rem; }
@@ -26,3 +26,12 @@
 }
 .add-source-btn:hover { border-color: #7c9ef8; color: #7c9ef8; }
 .loading { color: #aaa; }
+
+@media (max-width: 768px) {
+  .checklist-page { flex-direction: column; gap: 1rem; }
+  .checklist-sidebar { width: 100%; }
+  .month-list { flex-direction: row; flex-wrap: wrap; gap: 0.4rem; }
+  .month-btn { padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+  .checklist-header { flex-wrap: wrap; gap: 0.75rem; }
+  .page-title { font-size: 1.2rem; }
+}
