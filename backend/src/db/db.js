@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3';
-import { readFileSync } from 'fs';
+import { readFileSync, mkdirSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -10,6 +10,7 @@ let _db;
 function getDb() {
   if (!_db) {
     const dbPath = process.env.DB_PATH || './data/finance.sqlite';
+    mkdirSync(dirname(dbPath), { recursive: true });
     _db = new Database(dbPath);
     _db.pragma('journal_mode = WAL');
     _db.pragma('foreign_keys = ON');
