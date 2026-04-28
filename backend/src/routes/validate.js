@@ -23,15 +23,28 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
+async function fileToText(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  if (ext === '.pdf') {
+    const { text } = await extractText(fs.readFileSync(filePath));
+    return text;
+  }
+  // CSV / any text format — read as-is; Claude handles tabular text fine
+  return fs.readFileSync(filePath, 'utf8');
+}
+
 router.post('/upload', upload.single('file'), async (req, res) => {
   const { report_type } = req.body;
   const validTypes = ['har_habituach', 'pension_clearinghouse', 'har_hakesef'];
   if (!validTypes.includes(report_type) || !req.file) {
     return res.status(400).json({ error: 'report_type and file are required' });
   }
+  const ext = path.extname(req.file.originalname).toLowerCase();
+  if (!['.pdf', '.csv'].includes(ext)) {
+    return res.status(400).json({ error: 'Only PDF and CSV files are supported' });
+  }
   try {
-    const buf = fs.readFileSync(req.file.path);
-    const { text } = await extractText(buf);
+    const text = await fileToText(req.file.path);
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();

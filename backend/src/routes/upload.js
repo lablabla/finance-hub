@@ -34,11 +34,26 @@ router.post('/', upload.single('file'), async (req, res) => {
   let result;
   try {
     if (ext === '.csv') {
-      const parsed = await parseCSV(req.file.path, source_id);
-      result = await normalizeAndSave(parsed, source_id);
+      // Try per-source mapper first; fall back to AI extraction if no mapper exists
+      try {
+        const parsed = await parseCSV(req.file.path, source_id);
+        result = await normalizeAndSave(parsed, source_id);
+      } catch (mapperErr) {
+        if (mapperErr.message.startsWith('No CSV mapper')) {
+          const text = fs.readFileSync(req.file.path, 'utf8');
+          const parsed = await extractFromPDF({ text, source_id });
+          result = await normalizeAndSave(parsed, source_id);
+        } else {
+          throw mapperErr;
+        }
+      }
     } else if (ext === '.pdf') {
       const buf = fs.readFileSync(req.file.path);
-      const { text } = await extractText(buf);
+      const { text, pages } = await extractText(buf);
+      console.log(`[${new Date().toISOString()}] PDF extracted: ${pages} pages, ${text.length} chars for ${source_id}`);
+      if (text.trim().length < 50) {
+        throw new Error(`PDF appears to be image-based or empty (extracted ${text.trim().length} chars). Try exporting as CSV instead.`);
+      }
       const parsed = await extractFromPDF({ text, source_id });
       result = await normalizeAndSave(parsed, source_id);
     } else {
