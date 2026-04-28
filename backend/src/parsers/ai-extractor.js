@@ -7,7 +7,7 @@ const TX_LIMIT = 100;
 const TX_NOTE = `Include at most ${TX_LIMIT} transactions (most recent first). Keep description strings short — under 80 characters each.`;
 
 const SYSTEM_PROMPTS = {
-  'harel-pension': `You extract structured financial data from Israeli pension fund (קרן פנסיה) PDF reports by Harel insurance.
+  'harel-kupat-gemel': `You extract structured financial data from Israeli Kupat Gemel (קופת גמל) PDF reports by Harel insurance.
 Extract: account holder name, account number, current balance (in ILS), as-of date, and a list of transactions if present. ${TX_NOTE}
 Return JSON only, no prose. Schema:
 {"account":{"name":string,"id":string,"type":"pension","currency":"ILS","balance":number,"as_of":"YYYY-MM-DD"},"transactions":[{"date":"YYYY-MM-DD","description":string,"amount":number,"currency":"ILS"}]}`,

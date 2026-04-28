@@ -33,8 +33,8 @@ const sources = [
     frequency: 'monthly',
   },
   {
-    id: 'harel-pension',
-    name: 'Harel – Pension',
+    id: 'harel-kupat-gemel',
+    name: 'Harel – Kupat Gemel',
     category: 'pension',
     type: 'manual',
     format: 'PDF',

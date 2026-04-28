@@ -3,7 +3,7 @@ import { api } from '../../api/client.js';
 import './NetWorthCard.css';
 
 const CATEGORY_LABELS = {
-  bank: 'Bank', credit: 'Credit', pension: 'Pension',
+  bank: 'Bank', credit: 'Credit', pension: 'Kupat Gemel',
   invest: 'Investments', investment: 'Investments',
   study_fund: 'Study Fund', insurance: 'Insurance', other: 'Other',
 };
